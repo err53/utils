@@ -15,12 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import Link from "next/link";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "car-loan",
-  description: "by err53",
-};
 
 function calculateMonthlyPayment(
   purchasePrice: number,
