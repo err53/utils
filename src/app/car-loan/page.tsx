@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import Link from "next/link";
 
 function calculateMonthlyPayment(
   purchasePrice: number,
@@ -72,11 +73,17 @@ export default function Home() {
     0.1 * (form.watch("yearlyIncome") / 12);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+    <div>
       <main>
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Car Loan Calculator
+          car-loan
         </h1>
+        <p className="leading-7 [&:not(:first-child)]:mt-6">by err53</p>
+
+        <p className="leading-7 [&:not(:first-child)]:mt-6 underline">
+          <Link href="/">Home</Link>
+        </p>
+
         <Form {...form}>
           <form className="space-y-8 pt-8">
             <FormField
