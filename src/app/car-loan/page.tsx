@@ -60,17 +60,9 @@ export default function Home() {
     },
   });
 
-  const goodDownPayment =
-    form.watch("downPayment") >= 0.2 * form.watch("purchasePrice");
-  const goodLoanDuration = form.watch("term") <= 4 * 12;
-  const goodMonthlyPayment =
-    calculateMonthlyPayment(
-      form.watch("purchasePrice"),
-      form.watch("downPayment"),
-      form.watch("apr"),
-      form.watch("term")
-    ) <=
-    0.1 * (form.watch("yearlyIncome") / 12);
+  const goodDownPayment = 0.2 * form.watch("purchasePrice");
+  const goodLoanDuration = 4 * 12;
+  const goodMonthlyPayment = 0.1 * (form.watch("yearlyIncome") / 12);
 
   return (
     <div>
@@ -94,7 +86,7 @@ export default function Home() {
                   <FormLabel>Purchase Price</FormLabel>
                   <FormControl>
                     <div>
-                      <Input {...field} type="number" />
+                      <Input {...field} type="number" prefix="$" />
                       <Slider
                         defaultValue={[field.value]}
                         onChange={(value) => field.onChange(value)}
@@ -119,7 +111,7 @@ export default function Home() {
                   <FormLabel>Down Payment</FormLabel>
                   <FormControl>
                     <div>
-                      <Input {...field} type="number" />
+                      <Input {...field} type="number" prefix="$" />
                       <Slider
                         defaultValue={[field.value]}
                         onChange={(value) => field.onChange(value)}
@@ -197,7 +189,7 @@ export default function Home() {
                   <FormLabel>Yearly Income</FormLabel>
                   <FormControl>
                     <div>
-                      <Input {...field} type="number" />
+                      <Input {...field} type="number" prefix="$" />
                       <Slider
                         defaultValue={[field.value]}
                         onChange={(value) => field.onChange(value)}
@@ -217,18 +209,6 @@ export default function Home() {
           </form>
         </Form>
         <div className="pt-12">
-          <p className={goodDownPayment ? "text-green-500" : "text-red-500"}>
-            <strong>Good Down Payment:</strong> {goodDownPayment ? "Yes" : "No"}
-          </p>
-          <p className={goodLoanDuration ? "text-green-500" : "text-red-500"}>
-            <strong>Good Loan Duration:</strong>{" "}
-            {goodLoanDuration ? "Yes" : "No"}
-          </p>
-          <p className={goodMonthlyPayment ? "text-green-500" : "text-red-500"}>
-            <strong>Good Monthly Payment:</strong>{" "}
-            {goodMonthlyPayment ? "Yes" : "No"}
-          </p>
-
           <p>
             <strong>Monthly Payment:</strong> $
             {calculateMonthlyPayment(
@@ -237,6 +217,63 @@ export default function Home() {
               form.watch("apr"),
               form.watch("term")
             ).toFixed(2)}
+          </p>
+          <p>
+            The down payment should be at least ${goodDownPayment.toFixed(2)}{" "}
+            (20%).{" "}
+            <span
+              className={
+                form.watch("downPayment") >= goodDownPayment
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              Currently, it is ${Number(form.watch("downPayment")).toFixed(2)} (
+              {(
+                (form.watch("downPayment") / form.watch("purchasePrice")) *
+                100
+              ).toFixed(1)}
+              %).
+            </span>
+          </p>
+          <p>
+            The loan duration should be at most {goodLoanDuration} months (4
+            years).{" "}
+            <span
+              className={
+                form.watch("term") <= goodLoanDuration
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              Currently, it is {form.watch("term")} months.
+            </span>
+          </p>
+          <p>
+            The monthly payment should be at most $
+            {goodMonthlyPayment.toFixed(2)} (10% of $
+            {form.watch("yearlyIncome")} / 12).{" "}
+            <span
+              className={
+                calculateMonthlyPayment(
+                  form.watch("purchasePrice"),
+                  form.watch("downPayment"),
+                  form.watch("apr"),
+                  form.watch("term")
+                ) <= goodMonthlyPayment
+                  ? "text-green-500"
+                  : "text-red-500"
+              }
+            >
+              Currently, it is $
+              {calculateMonthlyPayment(
+                form.watch("purchasePrice"),
+                form.watch("downPayment"),
+                form.watch("apr"),
+                form.watch("term")
+              ).toFixed(2)}
+              .
+            </span>
           </p>
         </div>
       </main>
